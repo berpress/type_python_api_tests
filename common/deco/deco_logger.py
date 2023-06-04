@@ -103,3 +103,7 @@
 #         return inner
 #
 #     return wrapper
+
+
+def gg(a: int, b: int) -> str:
+    return a + b

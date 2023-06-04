@@ -21,3 +21,11 @@ repos:
       - id: mypy
         files: /tests
         args: [--ignore-missing-imports]
+
+      - id: mypy
+        files: /fixtures
+        args: [ --ignore-missing-imports ]
+
+      - id: mypy
+        files: /common
+        args: [ --ignore-missing-imports ]
