@@ -13,3 +13,5 @@ class TestAuth:
         res = app.auth.login(data=data)
         assert res.status_code == 401
         assert res.error_body.status_code == 401
+        assert res.error_body.description == "Invalid credentials"
+        assert res.error_body.error == "Bad Request"

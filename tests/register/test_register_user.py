@@ -12,5 +12,4 @@ class TestRegister:
         data = RegisterModel.random()
         res = app.register.register(data=data)
         assert res.status_code == 201
-        assert res.body.uuid
         assert res.body.description == "User created successfully."

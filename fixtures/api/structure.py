@@ -1,6 +1,5 @@
 import json
 import logging
-from typing import List, Any
 from typing import TypeVar, Type
 
 from requests import Response
@@ -12,16 +11,15 @@ logger = logging.getLogger("api")
 T = TypeVar("T")
 
 
-def structure(
-    response: Response, type_response: Type[T], body_request: Any = None
-) -> CustomResponse[T]:
+def structure(response: Response, type_response: Type[T]) -> CustomResponse[T]:
     url = response.url
+    assert isinstance(response.request.method, str)
     method = response.request.method
     status_code = response.status_code
     request_time = response.elapsed.total_seconds()
     headers = dict(response.request.headers)
     request: CustomRequests = CustomRequests(
-        body=body_request, method=method, url=url, headers=headers
+        body=_get_body_request(response), method=method, url=url
     )
     if status_code >= 400:
         body_error = ErrorBody(**response.json())
@@ -31,7 +29,7 @@ def structure(
         body = type_response(**response.json())
     else:
         body = None
-    custom_response = CustomResponse(
+    custom_response: CustomResponse = CustomResponse(
         url=url,
         method=method,
         status_code=status_code,
@@ -39,31 +37,17 @@ def structure(
         request=request,
         request_time=request_time,
         error_body=body_error,
+        headers=headers,
     )
-    return custom_response  # type: ignore
+    return custom_response
 
 
-def _convert_bytes_to_dict(body: bytes | str | None) -> dict:
-    if isinstance(body, bytes):
+def _get_body_request(response: Response) -> str | dict:
+    body = response.request.body
+    if body is None:
+        return {}
+    elif isinstance(body, bytes):
         return json.loads(body.decode("utf-8"))
+    elif isinstance(body, str):
+        return body
     return {}
-
-
-def _get_field_structure(type_response) -> List:
-    """
-    Return fields from response type
-    """
-    fields = []
-    for field in type_response.__attrs_attrs__:
-        fields.append(field.name)
-    return fields
-
-
-def _get_field_response(response):
-    """
-    Return fields from response
-    """
-    try:
-        return list(response.json().keys())
-    except Exception:
-        return response.text
