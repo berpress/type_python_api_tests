@@ -1,5 +1,5 @@
 # type_python_api_tests
-Python API tests with string typing
+Python API tests with strong typing
 
 In this repository will use such key libraries/technologies
 
