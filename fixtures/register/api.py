@@ -1,8 +1,7 @@
 from common.deco.request_logger import log
 from fixtures.api.models.client import CustomResponse
 from fixtures.api.structure import structure
-from fixtures.auth.models.auth import AuthModel
-from fixtures.register.models.register import RegisterUserResponse
+from fixtures.register.models.register import RegisterModel, RegisterUserResponse
 
 
 class Register:
@@ -12,7 +11,7 @@ class Register:
     _POST_REGISTER = "/register"
 
     @log("Register new user")
-    def register(self, data: AuthModel) -> CustomResponse[RegisterUserResponse]:
+    def register(self, data: RegisterModel) -> CustomResponse[RegisterUserResponse]:
         """
         https://app.swaggerhub.com/apis-docs/berpress/flask-rest-api/1.0.0#/register/regUser # noqa
         """

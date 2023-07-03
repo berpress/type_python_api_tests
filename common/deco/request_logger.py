@@ -1,26 +1,31 @@
 import json
 import logging
 import pprint
-from functools import wraps
 from json import JSONDecodeError
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, TypeVar, ParamSpec
 
 from fixtures.api.models.client import CustomResponse
 
-F = TypeVar("F", bound=Callable[..., Any])
 
 logger = logging.getLogger("api")
 
+T = TypeVar("T")
+P = ParamSpec("P")
+F = TypeVar("F", bound=Callable[..., Any])
+Param = ParamSpec("Param")
+RetType = TypeVar("RetType")
+OriginalFunc = Callable[..., CustomResponse[T]]
+DecoratedFunc = Callable[..., CustomResponse[T]]
 
-def log(message: str):
+
+def log(message: str) -> Callable[[OriginalFunc], DecoratedFunc]:
     """
     Request Logging
     :return: response
     """
 
-    def wrapper(function: F) -> Any:
-        @wraps(function)
-        def inner(*args, **kwargs) -> CustomResponse:
+    def wrapper(function: F) -> DecoratedFunc:
+        def inner(*args, **kwargs) -> CustomResponse[T]:
             logger.info(message)
             res: CustomResponse = function(*args, **kwargs)
             method = res.method

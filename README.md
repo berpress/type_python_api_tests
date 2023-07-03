@@ -15,7 +15,7 @@ In this repository will use such key libraries/technologies
 
 Use docker
 ```
-docker run -d -p 56733:80 litovsky/flask-api-test
+docker run -d -p 5000:5000 litovsky/flask-api-test
 ```
 And check in browser
 

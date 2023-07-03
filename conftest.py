@@ -22,7 +22,7 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def app(request) -> ClientApi:
+def app(request):
     url = request.config.getoption("--api-url")
     logger.info(f"Start api tests, url is {url}")
     return ClientApi(url=url)

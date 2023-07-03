@@ -39,7 +39,7 @@ def structure(response: Response, type_response: Type[T]) -> CustomResponse[T]:
         error_body=body_error,
         headers=headers,
     )
-    return custom_response
+    return custom_response  # type: ignore
 
 
 def _get_body_request(response: Response) -> str | dict:

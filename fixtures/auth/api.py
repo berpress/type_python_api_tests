@@ -1,3 +1,4 @@
+from requests import Response
 from common.deco.request_logger import log
 from fixtures.api.models.client import CustomResponse
 from fixtures.api.structure import structure
@@ -15,7 +16,7 @@ class Auth:
         """
         https://app.swaggerhub.com/apis-docs/berpress/flask-rest-api/1.0.0#/auth/authUser # noqa
         """
-        response = self.app.client.request(
+        response: Response = self.app.client.request(
             method="POST",
             url=f"{self.app.url}{self._POST_AUTH}",
             json=data.dict(),
